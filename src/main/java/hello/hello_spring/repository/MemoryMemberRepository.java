@@ -35,4 +35,9 @@ public class MemoryMemberRepository implements MemberRepository{
         return new ArrayList<>(store.values());
         //values는 member, member들이 반환
     }
+
+    //Test 랜덤순서로 인한 오류가 나지 않도록 지워주는 메소드
+    public void clearStore(){
+        store.clear();
+    }
 }
