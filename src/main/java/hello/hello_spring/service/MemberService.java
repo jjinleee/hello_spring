@@ -9,7 +9,14 @@ import java.util.Optional;
 
 public class MemberService {
 
-    private final MemberRepository memberRepository = new MemoryMemberRepository();
+    //테스트와 같은 인스턴스를 쓰기 위해 수정
+    private final MemberRepository memberRepository;
+
+
+    public MemberService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }  //constructor-직접넣는것이 아니라 외부에서 넣어주도록 바꿈
+
 
     //회원가입
     public Long join(Member member){
@@ -27,7 +34,7 @@ public class MemberService {
     private void validateDuplication(Member member) {
         memberRepository.findByName(member.getName())
                 .ifPresent(m->{
-                        throw new IllegalStateException(("이미 존재하는 회원입니다. "));
+                        throw new IllegalStateException(("이미 존재하는 회원입니다."));
                     });  //값이 있으면 이게 작동, null일 가능성때문에 Optional로 감쌈
     }
 
