@@ -9,13 +9,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+
 public class MemberService {
 
     //테스트와 같은 인스턴스를 쓰기 위해 수정
     private final MemberRepository memberRepository;
 
-    @Autowired
     public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }  //constructor-직접넣는것이 아니라 외부에서 넣어주도록 바꿈
