@@ -1,6 +1,5 @@
 package hello.hello_spring.repository;
 import hello.hello_spring.domain.Member;
-import hello.hello_spring.domain.Member;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import javax.sql.DataSource;
 import java.sql.*;
@@ -28,6 +27,7 @@ public class JdbcMemberRepository implements MemberRepository {
             pstmt.setString(1, member.getName());
             pstmt.executeUpdate();
             rs = pstmt.getGeneratedKeys();
+
             if (rs.next()) {
                 member.setId(rs.getLong(1));
             } else {
@@ -54,6 +54,7 @@ public class JdbcMemberRepository implements MemberRepository {
             pstmt = conn.prepareStatement(sql);
             pstmt.setLong(1, id);
             rs = pstmt.executeQuery();
+
             if(rs.next()) {
                 Member member = new Member();
                 member.setId(rs.getLong("id"));
@@ -66,17 +67,21 @@ public class JdbcMemberRepository implements MemberRepository {
             throw new IllegalStateException(e);
         } finally {
             close(conn, pstmt, rs);
-        } }
+        }
+    }
+
     @Override
     public List<Member> findAll() {
         String sql = "select * from member";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
+
         try {
             conn = getConnection();
             pstmt = conn.prepareStatement(sql);
             rs = pstmt.executeQuery();
+
             List<Member> members = new ArrayList<>();
             while(rs.next()) {
 
@@ -86,6 +91,7 @@ public class JdbcMemberRepository implements MemberRepository {
                 members.add(member);
             }
             return members;
+
         } catch (Exception e) {
             throw new IllegalStateException(e);
         } finally {
@@ -118,6 +124,7 @@ public class JdbcMemberRepository implements MemberRepository {
     }
 
     private Connection getConnection() {
+        //데이터베이스 커넥션을 유지시킴
         return DataSourceUtils.getConnection(dataSource);
     }
     private void close(Connection conn, PreparedStatement pstmt, ResultSet rs) {
@@ -144,5 +151,7 @@ public class JdbcMemberRepository implements MemberRepository {
         }
     }
     private void close(Connection conn) throws SQLException {
+        //닫을때도 DataSourceUtils를 통해서 닫아야함
         DataSourceUtils.releaseConnection(conn, dataSource);
-    } }
+    }
+}
